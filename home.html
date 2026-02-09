@@ -1,0 +1,1007 @@
+<div class="user-profile theme-{{theme}}">
+  <div class="profile-header">
+    <div class="profile-avatar">
+      {{#if avatar}}
+      <img src="{{avatar}}" alt="Profile avatar" />
+      {{/if}}
+    </div>
+    <div class="profile-info">
+      <h1 class="profile-name">@{{handle}}</h1>
+      {{#if spice}}
+      <div class="equipped-spice-container">
+        {{spice}}
+      </div>
+      {{/if}}
+      {{#if shelf_badges}}
+      <div class="shelf-spices">
+        {{#each shelf_badges}}
+          {{this}}
+        {{/each}}
+      </div>
+      {{/if}}
+      {{#if description}}
+      <div class="profile-description">{{description}}</div>
+      {{else}}
+      <div class="profile-description">This user hasn't written a description yet.</div>
+      {{/if}}
+      <div class="profile-stats">
+        <div class="followers-count">
+          {{follower_count}} followers
+        </div>
+        <a class="follow-button{{#if is_following}} following{{/if}}" saucepan-trigger-follow aria-label="{{#if is_following}}Unfollow{{else}}Follow{{/if}} @{{handle}}">
+          {{#if is_following}}Unfollow{{else}}Follow{{/if}}
+        </a>
+        <a class="user-menu-button" saucepan-trigger-user-menu aria-label="Open user menu">
+          Menu
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="companions-section">
+    <h2>Companions ({{total_companion_count}})</h2>
+    <div class="sort-controls">
+      <select saucepan-trigger-companions-sort>
+        <option value="posted_at">Date Posted</option>
+        <option value="interaction_count">Interactions</option>
+        <option value="favorite_count">Favorites</option>
+        <option value="name">Name</option>
+        <option value="score">Trending</option>
+      </select>
+      <input type="text" placeholder="Search companions..." class="search-input" saucepan-trigger-companions-search-input />
+      <a class="search-button" saucepan-trigger-companions-search-button>Search</a>
+    </div>
+    <div class="companions-grid">
+      {{#if paginated_companions}}
+        {{#each paginated_companions}}
+        <div class="companion-card{{#if nsfw}} nsfw{{/if}}">
+          <a href="{{url}}" class="companion-image-link">
+            <div class="companion-image">
+              <img src="{{image}}" alt="{{name}}" />
+              {{#if nsfw}}
+              <div class="nsfw-badge" aria-hidden="true">NSFW</div>
+              {{/if}}
+              {{#if is_new}}
+              <div class="new-badge" aria-hidden="true">NEW</div>
+              {{/if}}
+              {{#if is_updated}}
+              <div class="updated-badge" aria-hidden="true">UPDATED</div>
+              {{/if}}
+            </div>
+          </a>
+          <div class="companion-info">
+            <h3 class="companion-name">{{display_name}}</h3>
+            <p class="companion-description">{{short_description}}</p>
+            <div class="companion-stats">
+              <span title="Interactions" aria-label="{{interaction_count}} interactions">💬 {{interaction_count}}</span>
+              <span title="Chats" aria-label="{{chat_count}} chats">✉️ {{chat_count}}</span>
+              <span title="Portraits" aria-label="{{portrait_count}} portraits">🖼️ {{portrait_count}}</span>
+              <span title="Collections" aria-label="{{collection_count}} collections">🗂️ {{collection_count}}</span>
+              <span title="Lorebooks" aria-label="{{lorebook_count}} lorebooks">📚 {{lorebook_count}}</span>
+              <span title="Scenarios" aria-label="{{scenario_count}} scenarios">🚏 {{scenario_count}}</span>
+              <div class="companion-favorite">
+                <a class="favorite-button{{#if is_favorited}} favorited{{/if}}" saucepan-trigger-favorite="{{id}}" aria-label="{{#if is_favorited}}Unfavorite{{else}}Favorite{{/if}} {{display_name}}">
+                  Favorite {{favorite_count}}
+                </a>
+              </div>
+            </div>
+            <div class="companion-tags">
+              {{#each tags}}
+              <span class="tag" saucepan-tag="{{this}}">{{this}}</span>
+              {{/each}}
+            </div>
+          </div>
+        </div>
+        {{/each}}
+      {{else}}
+        <div class="no-companions">
+          <p>No companions found.</p>
+        </div>
+      {{/if}}
+    </div>
+    {{#if paginated_companions_page_numbers}}
+    <div class="pagination">
+      {{#if paginated_companions_pagination_info}}
+      <div class="pagination-button{{#unless paginated_companions_pagination_info.has_previous}} disabled{{/unless}}" saucepan-trigger-companions-page-back role="button" tabindex="0" aria-label="Go to previous page">Back</div>
+      {{/if}}
+      {{#each paginated_companions_page_numbers}}
+      <a class="pagination-link{{#if is_current}} current{{/if}}" saucepan-trigger-companions-pagination="{{number}}" aria-label="Go to page {{number}}"{{#if is_current}} aria-current="page"{{/if}}>
+        {{number}}
+      </a>
+      {{/each}}
+      <span class="pagination-info">Page {{current_companion_page}} of {{total_companion_pages}}</span>
+      <select saucepan-trigger-companions-page-size>
+        <option value="6">6 per page</option>
+        <option value="12">12 per page</option>
+        <option value="24">24 per page</option>
+        <option value="36">36 per page</option>
+      </select>
+      {{#if paginated_companions_pagination_info}}
+      <div class="pagination-button{{#unless paginated_companions_pagination_info.has_next}} disabled{{/unless}}" saucepan-trigger-companions-page-next role="button" tabindex="0" aria-label="Go to next page">Next</div>
+      {{/if}}
+    </div>
+    {{/if}}
+  </div>
+
+  {{#if gifted_companions}}
+  <div class="gifted-companions-section">
+    <h2>Gifted Companions ({{total_gifted_companion_count}})</h2>
+    <div class="companions-grid">
+      {{#each gifted_companions}}
+      <div class="companion-card{{#if nsfw}} nsfw{{/if}}">
+        <a href="{{url}}" class="companion-image-link">
+          <div class="companion-image">
+            <img src="{{image}}" alt="{{name}}" />
+            {{#if nsfw}}
+            <div class="nsfw-badge" aria-hidden="true">NSFW</div>
+            {{/if}}
+            {{#if is_new}}
+            <div class="new-badge" aria-hidden="true">NEW</div>
+            {{/if}}
+            {{#if is_updated}}
+            <div class="updated-badge" aria-hidden="true">UPDATED</div>
+            {{/if}}
+          </div>
+        </a>
+        <div class="companion-info">
+          <h3 class="companion-name">{{display_name}}</h3>
+          <p class="companion-description">{{short_description}}</p>
+          <div class="companion-stats">
+            <span title="Interactions" aria-label="{{interaction_count}} interactions">💬 {{interaction_count}}</span>
+            <span title="Chats" aria-label="{{chat_count}} chats">✉️ {{chat_count}}</span>
+            <span title="Portraits" aria-label="{{portrait_count}} portraits">🖼️ {{portrait_count}}</span>
+            <span title="Collections" aria-label="{{collection_count}} collections">🗂️ {{collection_count}}</span>
+            <span title="Lorebooks" aria-label="{{lorebook_count}} lorebooks">📚 {{lorebook_count}}</span>
+            <span title="Scenarios" aria-label="{{scenario_count}} scenarios">🚏 {{scenario_count}}</span>
+            <div class="companion-favorite">
+              <a class="favorite-button{{#if is_favorited}} favorited{{/if}}" saucepan-trigger-favorite="{{id}}" aria-label="{{#if is_favorited}}Unfavorite{{else}}Favorite{{/if}} {{display_name}}">
+                Favorite {{favorite_count}}
+              </a>
+            </div>
+          </div>
+          <div class="companion-tags">
+            {{#each tags}}
+            <span class="tag" saucepan-tag="{{this}}">{{this}}</span>
+            {{/each}}
+          </div>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+  </div>
+  {{/if}}
+
+  {{#if collaborated_companions}}
+  <div class="collaborated-companions-section">
+    <h2>Collaborated Companions ({{total_collaborated_companion_count}})</h2>
+    <div class="companions-grid">
+      {{#each collaborated_companions}}
+      <div class="companion-card{{#if nsfw}} nsfw{{/if}}">
+        <a href="{{url}}" class="companion-image-link">
+          <div class="companion-image">
+            <img src="{{image}}" alt="{{name}}" />
+            {{#if nsfw}}
+            <div class="nsfw-badge" aria-hidden="true">NSFW</div>
+            {{/if}}
+            {{#if is_new}}
+            <div class="new-badge" aria-hidden="true">NEW</div>
+            {{/if}}
+            {{#if is_updated}}
+            <div class="updated-badge" aria-hidden="true">UPDATED</div>
+            {{/if}}
+          </div>
+        </a>
+        <div class="companion-info">
+          <h3 class="companion-name">{{display_name}}</h3>
+          <p class="companion-description">{{short_description}}</p>
+          <div class="companion-stats">
+            <span title="Interactions" aria-label="{{interaction_count}} interactions">💬 {{interaction_count}}</span>
+            <span title="Chats" aria-label="{{chat_count}} chats">✉️ {{chat_count}}</span>
+            <span title="Portraits" aria-label="{{portrait_count}} portraits">🖼️ {{portrait_count}}</span>
+            <span title="Collections" aria-label="{{collection_count}} collections">🗂️ {{collection_count}}</span>
+            <span title="Lorebooks" aria-label="{{lorebook_count}} lorebooks">📚 {{lorebook_count}}</span>
+            <span title="Scenarios" aria-label="{{scenario_count}} scenarios">🚏 {{scenario_count}}</span>
+            <div class="companion-favorite">
+              <a class="favorite-button{{#if is_favorited}} favorited{{/if}}" saucepan-trigger-favorite="{{id}}" aria-label="{{#if is_favorited}}Unfavorite{{else}}Favorite{{/if}} {{display_name}}">
+                Favorite {{favorite_count}}
+              </a>
+            </div>
+          </div>
+          <div class="companion-tags">
+            {{#each tags}}
+            <span class="tag" saucepan-tag="{{this}}">{{this}}</span>
+            {{/each}}
+          </div>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+  </div>
+  {{/if}}
+
+  <div class="lorebooks-section">
+    <h2>Lorebooks ({{total_lorebook_count}})</h2>
+    <div class="sort-controls">
+      <select saucepan-trigger-lorebooks-sort>
+        <option value="name">Name</option>
+        <option value="posted_at">Date Posted</option>
+        <option value="updated_at">Updated</option>
+        <option value="favorite_count">Favorites</option>
+      </select>
+      <input type="text" placeholder="Search lorebooks..." class="search-input" saucepan-trigger-lorebooks-search-input />
+      <a class="search-button" saucepan-trigger-lorebooks-search-button>Search</a>
+    </div>
+    <div class="lorebooks-grid">
+      {{#if paginated_lorebooks}}
+        {{#each paginated_lorebooks}}
+        <div class="lorebook-card">
+          <a href="{{url}}" class="lorebook-image-link">
+            <div class="lorebook-image">
+              <img src="{{image}}" alt="{{name}}" />
+            </div>
+          </a>
+          <div class="lorebook-info">
+            <h3 class="lorebook-name">{{name}}</h3>
+            <p class="lorebook-description">{{description}}</p>
+            <div class="lorebook-stats">
+              <div class="lorebook-favorite">
+                <a class="favorite-button{{#if is_favorited}} favorited{{/if}}" saucepan-trigger-lorebook-favorite="{{id}}" aria-label="{{#if is_favorited}}Unfavorite{{else}}Favorite{{/if}} {{name}}">
+                  Favorite {{favorite_count}}
+                </a>
+              </div>
+            </div>
+            <div class="lorebook-tags">
+              {{#each tags}}
+              <span class="tag" saucepan-tag="{{this}}">{{this}}</span>
+              {{/each}}
+            </div>
+          </div>
+        </div>
+        {{/each}}
+      {{else}}
+        <div class="no-lorebooks">
+          <p>No lorebooks found.</p>
+        </div>
+      {{/if}}
+    </div>
+    {{#if paginated_lorebooks_page_numbers}}
+    <div class="pagination">
+      {{#if paginated_lorebooks_pagination_info}}
+      <div class="pagination-button{{#unless paginated_lorebooks_pagination_info.has_previous}} disabled{{/unless}}" saucepan-trigger-lorebooks-page-back role="button" tabindex="0" aria-label="Go to previous page">Back</div>
+      {{/if}}
+      {{#each paginated_lorebooks_page_numbers}}
+      <a class="pagination-link{{#if is_current}} current{{/if}}" saucepan-trigger-lorebooks-pagination="{{number}}" aria-label="Go to page {{number}}"{{#if is_current}} aria-current="page"{{/if}}>
+        {{number}}
+      </a>
+      {{/each}}
+      <span class="pagination-info">Page {{current_lorebook_page}} of {{total_lorebook_pages}}</span>
+      <select saucepan-trigger-lorebooks-page-size>
+        <option value="6">6 per page</option>
+        <option value="12">12 per page</option>
+        <option value="24">24 per page</option>
+        <option value="36">36 per page</option>
+      </select>
+      {{#if paginated_lorebooks_pagination_info}}
+      <div class="pagination-button{{#unless paginated_lorebooks_pagination_info.has_next}} disabled{{/unless}}" saucepan-trigger-lorebooks-page-next role="button" tabindex="0" aria-label="Go to next page">Next</div>
+      {{/if}}
+    </div>
+    {{/if}}
+  </div>
+
+  <div class="collections-section">
+    <h2>Collections ({{total_collection_count}})</h2>
+    <div class="sort-controls">
+      <select saucepan-trigger-collections-sort>
+        <option value="posted_at">Date Posted</option>
+        <option value="name">Name</option>
+        <option value="favorite_count">Favorites</option>
+      </select>
+      <input type="text" placeholder="Search collections..." class="search-input" saucepan-trigger-collections-search-input />
+      <a class="search-button" saucepan-trigger-collections-search-button>Search</a>
+    </div>
+    <div class="collections-grid">
+      {{#if paginated_collections}}
+        {{#each paginated_collections}}
+        <div class="collection-card">
+          <a href="{{url}}" class="collection-image-link">
+            <div class="collection-image">
+              {{#if image}}
+              <img src="{{image}}" alt="{{name}}" />
+              {{else}}
+              <div class="default-collection-image">📚</div>
+              {{/if}}
+            </div>
+          </a>
+          <div class="collection-info">
+            <h3 class="collection-name">{{name}}</h3>
+            <p class="collection-description">{{description}}</p>
+            <div class="collection-stats">
+              <span title="Companions" aria-label="{{companion_count}} companions">👥 {{companion_count}}</span>
+              <div class="collection-favorite">
+                <a class="favorite-button{{#if is_favorited}} favorited{{/if}}" saucepan-trigger-collection-favorite="{{id}}" aria-label="{{#if is_favorited}}Unfavorite{{else}}Favorite{{/if}} {{name}}">
+                  Favorite {{favorite_count}}
+                </a>
+              </div>
+            </div>
+            <div class="collection-tags">
+              {{#each tags}}
+              <span class="tag" saucepan-tag="{{this}}">{{this}}</span>
+              {{/each}}
+            </div>
+          </div>
+        </div>
+        {{/each}}
+      {{else}}
+        <div class="no-collections">
+          <p>No collections found.</p>
+        </div>
+      {{/if}}
+    </div>
+    {{#if paginated_collections_page_numbers}}
+    <div class="pagination">
+      {{#if paginated_collections_pagination_info}}
+      <div class="pagination-button{{#unless paginated_collections_pagination_info.has_previous}} disabled{{/unless}}" saucepan-trigger-collections-page-back role="button" tabindex="0" aria-label="Go to previous page">Back</div>
+      {{/if}}
+      {{#each paginated_collections_page_numbers}}
+      <a class="pagination-link{{#if is_current}} current{{/if}}" saucepan-trigger-collections-pagination="{{number}}" aria-label="Go to page {{number}}"{{#if is_current}} aria-current="page"{{/if}}>
+        {{number}}
+      </a>
+      {{/each}}
+      <span class="pagination-info">Page {{current_collection_page}} of {{total_collection_pages}}</span>
+      <select saucepan-trigger-collections-page-size>
+        <option value="6">6 per page</option>
+        <option value="12">12 per page</option>
+        <option value="24">24 per page</option>
+        <option value="36">36 per page</option>
+      </select>
+      {{#if paginated_collections_pagination_info}}
+      <div class="pagination-button{{#unless paginated_collections_pagination_info.has_next}} disabled{{/unless}}" saucepan-trigger-collections-page-next role="button" tabindex="0" aria-label="Go to next page">Next</div>
+      {{/if}}
+    </div>
+    {{/if}}
+  </div>
+
+  <div class="posts-section">
+    <h2>Recent Posts ({{total_posts}})</h2>
+    {{#if recent_posts}}
+    <div class="posts-grid">
+      {{#each recent_posts}}
+      <div class="post-card">
+        {{#if image}}
+        <a href="{{url}}" class="post-image-link">
+          <div class="post-image">
+            <img src="{{image}}" alt="{{title}}" />
+          </div>
+        </a>
+        {{/if}}
+        <div class="post-info">
+          <h3 class="post-title"><a href="{{url}}">{{title}}</a></h3>
+          {{#if blurb}}
+          <p class="post-blurb">{{blurb}}</p>
+          {{/if}}
+          <div class="post-meta">
+            <span class="post-date">Posted {{relative_posted_at}} on {{posted_at}}</span>
+            {{#if tags}}
+            <div class="post-tags">
+              {{#each tags}}
+              <span class="tag" saucepan-tag="{{this}}">{{this}}</span>
+              {{/each}}
+            </div>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+    {{#if link_to_posts}}
+    <div class="view-all-posts">
+      <a href="{{link_to_posts}}" class="view-all-link">View All Posts</a>
+    </div>
+    {{/if}}
+    {{else}}
+    <div class="no-posts">
+      <p>This user hasn't created any posts yet.</p>
+    </div>
+    {{/if}}
+  </div>
+</div>
+
+<style>
+  /* Theme variables */
+  .theme-light {
+    --surface: #ffffff;
+    --background: #f5f5f5;
+    --text: #171717;
+    --text-secondary: #444444;
+    --accent: #5d7bb9;
+    --accent-hover: #4a69a7;
+    --danger: #e74c3c;
+    --border: #eee;
+    --card-bg: #ffffff;
+    --tag-bg: #f0f0f0;
+    --empty-state-bg: #f9f9f9;
+  }
+
+  .theme-dark {
+    --surface: #333333;
+    --background: #222222;
+    --text: #e6e6e6;
+    --text-secondary: #b0b0b0;
+    --accent: #5d7bb9;
+    --accent-hover: #4a69a7;
+    --danger: #e74c3c;
+    --border: #444;
+    --card-bg: #333;
+    --tag-bg: #444;
+    --empty-state-bg: #333;
+  }
+
+  /* Base styles */
+  .user-profile {
+    padding: 4rem 2rem 2rem;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: var(--background);
+    color: var(--text);
+  }
+
+  /* Layout */
+  .profile-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .profile-avatar img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .profile-name {
+    font-size: 2.5rem;
+    margin: 0;
+    line-height: 1.2;
+    color: var(--text);
+  }
+  .equipped-spice-container {
+    display: inline-block;
+    margin: 0.5rem 0;
+  }
+
+  .equipped-spice-container img {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    vertical-align: middle;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  /* Backward compatibility: still support equipped-spice class directly on img */
+  img.equipped-spice {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    vertical-align: middle;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .shelf-spices {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0.5rem 0;
+    flex-wrap: wrap;
+  }
+
+  .shelf-spices img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    vertical-align: middle;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  /* Backward compatibility: still support shelf-badge class directly on img */
+  img.shelf-badge {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    vertical-align: middle;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .profile-description {
+    margin: 1rem 0;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    max-width: 800px;
+    color: var(--text);
+  }
+
+  .profile-stats {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+
+  .followers-count {
+    color: var(--text-secondary);
+  }
+
+  .follow-button {
+    padding: 0.5rem 1.2rem;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    background-color: var(--accent);
+    color: white;
+  }
+
+  .follow-button.following {
+    background-color: var(--text-secondary);
+    color: var(--text);
+  }
+
+  .user-menu-button {
+    padding: 0.5rem 1.2rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    background-color: var(--surface);
+    color: var(--text);
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.2s ease;
+  }
+
+  .user-menu-button:hover {
+    background-color: var(--tag-bg);
+  }
+
+  /* Section styles */
+  .companions-section,
+  .gifted-companions-section,
+  .collaborated-companions-section,
+  .lorebooks-section,
+  .collections-section,
+  .posts-section {
+    margin-bottom: 3rem;
+  }
+
+  .companions-section h2,
+  .gifted-companions-section h2,
+  .collaborated-companions-section h2,
+  .lorebooks-section h2,
+  .collections-section h2,
+  .posts-section h2 {
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  /* Grid layouts */
+  .companions-grid,
+  .lorebooks-grid,
+  .collections-grid,
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+
+  /* Card styles */
+  .companion-card,
+  .lorebook-card,
+  .collection-card,
+  .post-card {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  /* Image styles */
+  .companion-image,
+  .lorebook-image {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1 / 1.3;
+    background-color: var(--background);
+  }
+
+  .collection-image {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 16 / 9;
+    background-color: var(--background);
+  }
+
+  .companion-image img,
+  .lorebook-image img,
+  .collection-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .companion-image img,
+  .lorebook-image img {
+    object-position: 50% 35%;
+  }
+
+  .collection-image img {
+    object-position: center;
+  }
+
+  .default-collection-image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    background-color: var(--tag-bg);
+    color: var(--text-secondary);
+  }
+
+  .nsfw-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    background-color: var(--danger);
+    color: white;
+  }
+
+  .new-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    background-color: #28a745;
+    color: white;
+  }
+
+  .updated-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    background-color: #17a2b8;
+    color: white;
+  }
+
+  /* Info section styles */
+  .companion-info,
+  .lorebook-info,
+  .collection-info {
+    padding: 1rem;
+  }
+
+  .companion-name,
+  .lorebook-name,
+  .collection-name {
+    margin: 0 0 0.5rem;
+    font-size: 1.3rem;
+    color: var(--text);
+  }
+
+  .companion-description,
+  .lorebook-description,
+  .collection-description {
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    height: 2.8rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    color: var(--text);
+  }
+
+  /* Stats and tags styles */
+  .companion-stats,
+  .lorebook-stats,
+  .collection-stats {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.9rem;
+    margin-bottom: 0.8rem;
+    align-items: center;
+    color: var(--text-secondary);
+    flex-wrap: wrap;
+  }
+
+  .companion-favorite,
+  .lorebook-favorite,
+  .collection-favorite {
+    margin-left: auto;
+  }
+
+  .favorite-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: var(--text-secondary);
+  }
+
+  .favorite-button.favorited {
+    background: var(--danger);
+    color: white;
+  }
+
+  .companion-tags,
+  .lorebook-tags,
+  .collection-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tag {
+    padding: 0.2rem 0.7rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    background-color: var(--tag-bg);
+    color: var(--text);
+  }
+
+  /* Post styles */
+  .post-image {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 16 / 9;
+    background-color: var(--background);
+  }
+
+  .post-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .post-info {
+    padding: 1rem;
+  }
+
+  .post-title {
+    margin: 0 0 0.5rem;
+    font-size: 1.3rem;
+    color: var(--text);
+  }
+
+  .post-title a {
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .post-title a:hover {
+    color: var(--accent);
+  }
+
+  .post-blurb {
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    color: var(--text);
+  }
+
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: auto;
+  }
+
+  .post-date {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+  }
+
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .view-all-posts {
+    text-align: center;
+    margin-top: 1.5rem;
+  }
+
+  .view-all-link {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    background-color: var(--accent);
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+  }
+
+  .view-all-link:hover {
+    background-color: var(--accent-hover);
+  }
+
+  /* Empty state styles */
+  .no-companions,
+  .no-lorebooks,
+  .no-collections,
+  .no-posts {
+    text-align: center;
+    padding: 3rem;
+    border-radius: 8px;
+    background-color: var(--empty-state-bg);
+    color: var(--text-secondary);
+  }
+
+  /* Link styles */
+  .companion-image-link,
+  .lorebook-image-link,
+  .collection-image-link,
+  .post-image-link {
+    text-decoration: none;
+    display: block;
+  }
+
+  /* Sort controls styles */
+  .sort-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .sort-controls select,
+  .sort-controls button,
+  .sort-controls input,
+  .sort-controls .search-button {
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background-color: var(--surface);
+    color: var(--text);
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+
+  .search-input {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .search-button {
+    padding: 0.5rem 1.2rem;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    background-color: var(--accent);
+    color: white;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+  }
+
+  .search-button:hover {
+    background-color: var(--accent-hover);
+  }
+
+  .pagination select {
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    border: 1px solid var(--text-secondary);
+    background-color: var(--surface);
+    color: var(--text);
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+
+  .pagination select:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .sort-controls select:focus,
+  .sort-controls button:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .sort-controls button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Pagination styles */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+    padding: 1rem 0;
+  }
+
+  .pagination-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.5rem;
+    height: 2.5rem;
+    padding: 0 0.75rem;
+    border-radius: 6px;
+    background-color: var(--surface);
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 500;
+    border: 1px solid var(--text-secondary);
+    cursor: pointer;
+  }
+
+  .pagination-link.current {
+    background-color: var(--accent);
+    color: var(--surface);
+    border-color: var(--accent);
+    font-weight: 600;
+  }
+
+  .pagination-button {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    background-color: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--text-secondary);
+    cursor: pointer;
+    font-weight: 500;
+    user-select: none;
+  }
+
+  .pagination-button:hover:not(.disabled) {
+    background-color: var(--accent);
+    color: var(--surface);
+    border-color: var(--accent);
+  }
+
+  .pagination-button.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .pagination-info {
+    padding: 0 0.75rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+</style>
